@@ -60,7 +60,7 @@ if __name__ == "__main__":
     if len(sys.argv)!=2:
         print("Format of call is 'python process_files.py <input_wav_file>'")
         sys.exit(2)
-    first_arg = os.path.expanduser(sys.argv[1])
+    first_arg = os.path.realpath(sys.argv[1])
     print(first_arg, sys.argv[1])
     out_dir = first_arg.strip('.wav')+'_noise.prof'
     make_noise_profile(out_dir, first_arg)
