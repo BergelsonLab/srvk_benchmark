@@ -54,6 +54,15 @@ def extract_audio(out_file, file_in, start_time, end_time):
     ]
     sp.check_call(command)
 
+'''
+
+'''
+def diarize(extracted_file):
+    command = [
+        '/home/vagrant/bin/vids2web.sh',
+        extracted_file
+    ]
+
 
 
 if __name__ == "__main__":
@@ -61,7 +70,6 @@ if __name__ == "__main__":
         print("Format of call is 'python process_files.py <input_wav_file>'")
         sys.exit(2)
     first_arg = os.path.realpath(sys.argv[1])
-    print(first_arg, sys.argv[1])
     out_dir = first_arg.strip('.wav')+'_noise.prof'
     make_noise_profile(out_dir, first_arg)
     denoised_output = first_arg.strip('.wav')+'_denoised.wav'
@@ -69,6 +77,6 @@ if __name__ == "__main__":
     start_time = '00:00:00'
     end_time = '00:10:00'
     extracted_file_name = first_arg.strip('.wav')+'-'+'_'.join(start_time.split(":"))+'-'+'_'.join(end_time.split(":"))+'.mp3'
-    print(extracted_file_name, denoised_output, start_time, end_time)
     extract_audio(extracted_file_name, denoised_output, start_time, end_time)
+    diarize(extracted_file_name)
     print("DONE")
