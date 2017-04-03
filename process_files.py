@@ -61,9 +61,9 @@ if __name__ == "__main__":
         print("Format of call is 'python process_files.py <input_wav_file>'")
         sys.exit(2)
     first_arg = sys.argv[1]
-    out_dir = first_arg.split('.')[0]+'_noise.prof'
+    out_dir = first_arg.strip('.wav')+'_noise.prof'
     make_noise_profile(out_dir, first_arg)
-    denoised_output = first_arg.split('.')[0]+'_denoised.wav'
+    denoised_output = first_arg.strip('.wav')+'_denoised.wav'
     denoise_audio(denoised_output, first_arg, out_dir, 0.22)
     start_time = '00:00:00'
     end_time = '00:10:00'
