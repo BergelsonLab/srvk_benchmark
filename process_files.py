@@ -67,6 +67,6 @@ if __name__ == "__main__":
     denoise_audio(denoised_output, first_arg, out_dir, 0.22)
     start_time = '00:00:00'
     end_time = '00:10:00'
-    extracted_file_name = first_arg.split('.')[0]+'-'+'_'.join(start_time.split(":"))+'-'+'_'.join(end_time.split(":"))+'.mp3'
+    extracted_file_name = first_arg.strip('.wav')+'-'+'_'.join(start_time.split(":"))+'-'+'_'.join(end_time.split(":"))+'.mp3'
     extract_audio(extracted_file_name, denoised_output, start_time, end_time)
     print("DONE")
