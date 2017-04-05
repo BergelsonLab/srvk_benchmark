@@ -59,8 +59,10 @@ def extract_audio(out_file, file_in, start_time, end_time):
 '''
 def diarize(extracted_file):
     command = [
-        '/home/vagrant/bin/vids2web.sh',
-        extracted_file
+        'vagrant',
+        'ssh',
+        '-c',
+        './speech2text.sh /vagrant/'+extracted_file
     ]
 
 
