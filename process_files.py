@@ -39,9 +39,9 @@ def denoise_audio(out_file, file_in, noise_prof_file, sensitivity):
 file_in: specify your .wav file
 out_file: specify your .mp3 output file
 start_time: format HH:MM:SS
-end_time: format HH:MM:SS
+duration: format HH:MM:SS
 '''
-def extract_audio(out_file, file_in, start_time, end_time):
+def extract_audio(out_file, file_in, start_time, duration):
     command = [
         'ffmpeg',
         '-ss',
@@ -58,6 +58,8 @@ def extract_audio(out_file, file_in, start_time, end_time):
 
 '''
 def diarize(extracted_file):
+    ## currently set up to be run from host machine
+    ## need to test running inside of VM
     command = [
         'vagrant',
         'ssh',
@@ -78,10 +80,10 @@ if __name__ == "__main__":
     denoised_output = first_arg.strip('.wav')+'_denoised.wav'
     denoise_audio(denoised_output, first_arg, out_dir, 0.22)
     print("DENOISED")
-    start_time = '00:00:00'
-    end_time = '00:10:00'
+    start_time = '01:00:00'
+    duration = '00:10:00'
     extracted_file_name = first_arg.strip('.wav')+'-'+'_'.join(start_time.split(":"))+'-'+'_'.join(end_time.split(":"))+'.mp3'
-    extract_audio(extracted_file_name, denoised_output, start_time, end_time)
+    extract_audio(extracted_file_name, denoised_output, start_time, duration)
     print("EXTRACTED")
     diarize(extracted_file_name)
     print("DIARIZED")
