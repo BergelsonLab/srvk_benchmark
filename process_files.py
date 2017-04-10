@@ -55,23 +55,75 @@ def extract_audio(out_file, file_in, start_time, duration):
     sp.check_call(command)
 
 '''
-
+extracted_file: input .wav file
 '''
 def diarize(extracted_file):
     ## currently set up to be run from host machine
     ## need to test running inside of VM
     command = [
-        '/home/vagrant/bin/speech2text.sh', 
+        '/home/vagrant/bin/speech2text.sh',
         ' /vagrant/'+extracted_file
     ]
     sp.check_call(command)
 
+'''
+input_file: human created csv file
+'''
+def make_tuples_BLAB(input_file):
+    human_tuple_list=[]
+    with open('/vagrant/'+input_file, 'r') as csvfile:
+        reader = csv.reader(csvfile)
+        next(reader,None)
+        for row in reader:
+            word = row[1]
+            onset_offset = row[5]
+            onset = int(onset_offset.split('_')[0])
+            offset = int(onset_offset.split('_')[1])
+            human_tuple_list.append((word, onset, offset))
+    return human_tuple_list
+'''
+input_file: input csv file converted from ctm
+'''
+def make_tuples_ctm(input_file):
+    tuple_list = []
+    with open(input_file, 'r') as csvfile:
+        reader = csv.reader(csvfile)
+        next(reader, None)
+        for row in reader:
+            word = row[1]
+            onset_offset = row[0].split('_')
+            onset = int(onset_offset[0])
+            offset = int(onset_offset[1])
+            tuple_list.append((word, onset, offset))
+    return tuple_list
+
+'''
+input_file: input ctm file
+'''
+def convert_ctm_to_csv(input_file):
+    f = open('/vagrant/build/output/'+input_file)
+    lines = f.readlines()
+    f.close()
+    csv_file = input_file.strip('.ctm')+'.csv'
+    with open('/vagrant/'+csv_file, 'w') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['Time_interval', "Utterance", "Confidence?"])
+        for line in lines:
+            split_line = line.split()
+            onset_time = int(1000*(float(split_line[2]))) # multiply by 1000 to convert to milliseconds
+            offset_time = int(1000*(float(split_line[2])+float(split_line[3]))) # multiply by 1000 to convert to milliseconds
+            utterance = split_line[4]
+            confidence = float(split_line[5])
+            time_interval = str(onset_time)+'_'+str(offset_time)
+            writer.writerow([time_interval, utterance, confidence])
+    return '/vagrant/'+csv_file
 
 if __name__ == "__main__":
-    if len(sys.argv)!=2:
-        print("Format of call is 'python process_files.py <input_wav_file>'")
+    if len(sys.argv)!=3:
+        print("Format of call is 'python process_files.py <input_wav_file> <input_csv_file>'")
         sys.exit(2)
     first_arg = os.path.realpath(sys.argv[1])
+    BLAB_csv = os.path.realpath(sys.argv[2]).split('/')[-1]
     out_dir = first_arg.strip('.wav')+'_noise.prof'
     make_noise_profile(out_dir, first_arg)
     print("NOISE PROFILE CREATED")
@@ -86,7 +138,6 @@ if __name__ == "__main__":
     print("EXTRACTED")
     diarize(extracted_file_name)
     print("DIARIZED")
-    print("Noise profile: ", out_dir)
-    print("Denoised file: ", denoised_output)
-    print("Extracted audio: ", extracted_file_name)
-
+    ctm_file = convert_ctm_to_csv(extracted_file_name.strip('.mp3')+'.ctm')
+    make_tuples_BLAB(BLAB_csv)
+    make_tuples_ctm(ctm_file)
