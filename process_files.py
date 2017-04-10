@@ -87,3 +87,6 @@ if __name__ == "__main__":
     print("EXTRACTED")
     diarize(extracted_file_name)
     print("DIARIZED")
+    print("Noise profile: ", out_dir)
+    print("Denoised file: ", denoised_output)
+    print("Extracted audio: ", extracted_file_name)
