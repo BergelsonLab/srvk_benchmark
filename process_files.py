@@ -164,3 +164,4 @@ if __name__ == "__main__":
     ctm_file = convert_ctm_to_csv(extracted_file_name.strip('.mp3')+'.ctm')
     blab_tuples = make_tuples_BLAB(BLAB_csv)
     ctm_tuples = make_tuples_ctm(ctm_file)
+    compare_files(ctm_tuples, blab_tuples, 2000)
