@@ -118,6 +118,29 @@ def convert_ctm_to_csv(input_file):
             writer.writerow([time_interval, utterance, confidence])
     return '/vagrant/'+csv_file
 
+'''
+Compare processed file to VSK outputted files (within time range specified)
+'''
+def compare_files(ctm_list, blab_list, time):
+    len_vsk = len(ctm_list)
+    len_blab = len(blab_list)
+    num_matches = 0
+    for blab_line in blab_list:
+        blab_word = blab_line[0]
+        blab_onset = blab_line[1]
+        blab_offset = blab_line[2]
+        for ctm_line in ctm_list:
+            ctm_word = ctm_line[0]
+            ctm_onset = ctm_line[1]
+            ctm_offset = ctm_line[2]
+            if ctm_word == ctm_word:
+                if (abs(blab_onset-ctm_onset) <= time) and (abs(blab_offset-ctm_offset) <= time):
+                    print(blab_word, blab_onset, blab_offset)
+                    print(ctm_word, ctm_onset, ctm_offset)
+                    num_matches+=1
+    print("% matched: ", int(num_matches),int(len_blab))
+    print()
+
 if __name__ == "__main__":
     if len(sys.argv)!=3:
         print("Format of call is 'python process_files.py <input_wav_file> <input_csv_file>'")
@@ -139,5 +162,5 @@ if __name__ == "__main__":
     diarize(extracted_file_name)
     print("DIARIZED")
     ctm_file = convert_ctm_to_csv(extracted_file_name.strip('.mp3')+'.ctm')
-    make_tuples_BLAB(BLAB_csv)
-    make_tuples_ctm(ctm_file)
+    blab_tuples = make_tuples_BLAB(BLAB_csv)
+    ctm_tuples = make_tuples_ctm(ctm_file)
