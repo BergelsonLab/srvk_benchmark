@@ -115,7 +115,7 @@ def convert_ctm_to_csv(input_file):
             start = split_line[0].split('-')[1].split('_')
             start_time = 3600*int(start[0])+60*int(start[1])+int(start[2])
             onset_time = int(1000*(float(split_line[2])+float(start_time))) # multiply by 1000 to convert to milliseconds
-            offset_time = int(1000*(float(split_line[2])+float(split_line[3]))) # multiply by 1000 to convert to milliseconds
+            offset_time = int(1000*(float(split_line[2])+float(start_time)+float(split_line[3]))) # multiply by 1000 to convert to milliseconds
             utterance = split_line[4]
             confidence = float(split_line[5])
             time_interval = str(onset_time)+'_'+str(offset_time)
