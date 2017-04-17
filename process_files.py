@@ -50,8 +50,6 @@ def extract_audio(out_file, file_in, start_time, duration):
         file_in,
         '-t',
         duration,
-        '-c',
-        'copy',
         out_file
     ]
     sp.check_call(command)
