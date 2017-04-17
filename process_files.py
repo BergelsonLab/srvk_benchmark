@@ -50,6 +50,8 @@ def extract_audio(out_file, file_in, start_time, duration):
         file_in,
         '-t',
         duration,
+        '-c',
+        'copy',
         out_file
     ]
     sp.check_call(command)
@@ -110,7 +112,9 @@ def convert_ctm_to_csv(input_file):
         writer.writerow(['Time_interval', "Utterance", "Confidence?"])
         for line in lines:
             split_line = line.split()
-            onset_time = int(1000*(float(split_line[2]))) # multiply by 1000 to convert to milliseconds
+            start = split_line[0].split('-')[1].split('_')
+            start_time = 3600*int(start[0])+60*int(start[1])+int(start[2])
+            onset_time = int(1000*(float(split_line[2])+float(start_time))) # multiply by 1000 to convert to milliseconds
             offset_time = int(1000*(float(split_line[2])+float(split_line[3]))) # multiply by 1000 to convert to milliseconds
             utterance = split_line[4]
             confidence = float(split_line[5])
