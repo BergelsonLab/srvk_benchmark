@@ -3,6 +3,22 @@ import os
 import sys
 import subprocess as sp
 
+'''
+file_in: specify your .wav file
+'''
+def file_for_noise_profile(file_in):
+    command = [
+	'ffmpeg', 
+	'-i', 
+	file_in,
+	'-vn',
+	'-ss',
+	'00:00:00', 
+	'-t',
+	'00:00:01', 
+	'short_for_noise.wav'
+    ]
+    sp.check_call(command)
 
 '''
 file_in: specify your .wav file
@@ -140,7 +156,9 @@ def compare_files(ctm_list, blab_list, time):
                     print(blab_word, blab_onset, blab_offset)
                     print(ctm_word, ctm_onset, ctm_offset)
                     num_matches+=1
-    print("% matched: ", int(num_matches),int(len_blab), int(len_ctm))
+    print("# matched: ", int(num_matches))
+    print("# of blab words: ", int(len_blab))
+    print("# of found words: ", int(len_ctm))
     print()
 
 if __name__ == "__main__":
@@ -150,7 +168,10 @@ if __name__ == "__main__":
     first_arg = os.path.realpath(sys.argv[1])
     BLAB_csv = os.path.realpath(sys.argv[2]).split('/')[-1]
     out_dir = first_arg.strip('.wav')+'_noise.prof'
-    make_noise_profile(out_dir, first_arg)
+    short_for_noise = 'short_for_noise.wav'
+    print("short")
+    file_for_noise_profile(first_arg)
+    make_noise_profile(out_dir, short_for_noise)
     print("NOISE PROFILE CREATED")
     denoised_output = first_arg.strip('.wav')+'_denoised.wav'
     denoise_audio(denoised_output, first_arg, out_dir, 0.22)
