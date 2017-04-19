@@ -1,6 +1,6 @@
 # srvk_benchmark
 
-srvk_benchmark is a tool for comparing Speech Recognition Virtual Kitchen's eesen-transcriber to the 
+srvk_benchmark is a tool for comparing Speech Recognition Virtual Kitchen's eesen-transcriber output to the 
 BLAB created annotation files.
 
 ## Installation
@@ -57,6 +57,7 @@ sudo apt-get install ffmpeg
 git clone https://github.com/BergelsonLab/srvk_benchmark
 ```
 
+## Running the Comparisons
 Now that our repo has been cloned, we are ready to run the comparison process.
 
 ```
