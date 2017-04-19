@@ -162,8 +162,8 @@ def compare_files(ctm_list, blab_list, time):
     print()
 
 if __name__ == "__main__":
-    if len(sys.argv)!=3:
-        print("Format of call is 'python process_files.py <input_wav_file> <input_csv_file>'")
+    if len(sys.argv)!=5:
+        print("Format of call is 'python process_files.py <input_wav_file> <input_csv_file>' <start_time> <duration>")
         sys.exit(2)
     first_arg = os.path.realpath(sys.argv[1])
     BLAB_csv = os.path.realpath(sys.argv[2]).split('/')[-1]
@@ -176,8 +176,10 @@ if __name__ == "__main__":
     denoised_output = first_arg.strip('.wav')+'_denoised.wav'
     denoise_audio(denoised_output, first_arg, out_dir, 0.22)
     print("DENOISED")
-    start_time = '01:00:00'
-    duration = '00:10:00'
+    start_time = sys.argv[3]
+    duration = sys.argv[4]
+    #start_time = '01:00:00'
+    #duration = '00:10:00'
     extracted_file_name_full = first_arg.strip('.wav')+'-'+'_'.join(start_time.split(":"))+'-'+'_'.join(duration.split(":"))+'.mp3'
     extracted_file_name = extracted_file_name_full.split('/')[-1]
     extract_audio(extracted_file_name_full, denoised_output, start_time, duration)
