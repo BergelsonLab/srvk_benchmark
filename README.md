@@ -62,8 +62,12 @@ Now that our repo has been cloned, we are ready to run the comparison process.
 
 ```
 cd srvk_benchmark
-python process_files.py /vagrant/<input wav file> /vagrant/<input csv file>
+python process_files.py /vagrant/<input wav file> /vagrant/<input csv file> <start_time> <duration>
 ```
+ Example usage:
+ ```
+ python process_files.py /vagrant/06_06.wav /vagrant/06_06_newclan_merged_processed.csv 01:30:00 00:10:00
+ ```
 
 If you need to add more files, exit the VM and add more files to the eesen-transcriber directory.
 
